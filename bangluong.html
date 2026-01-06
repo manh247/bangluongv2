@@ -1,478 +1,479 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sổ Lương Galaxy (Balanced UI)</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sổ Lương Galaxy (Balanced UI)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        :root {
-            /* MÀU SẮC GALAXY */
-            --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --primary: #00d2ff;       /* Xanh Cyan Neon */
-            --money: #00ff87;         /* Xanh lá Neon */
-            --text-main: #ffffff;
-            --text-sub: #b2b2b2;
-            --radius: 20px;
-            
-            /* Màu Modal mới cho giống hình mẫu */
-            --modal-bg: #1A1A2E; 
-            --input-bg: #262640;
-        }
+    <style>
+        :root {
+            /* MÀU SẮC GALAXY */
+            --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary: #00d2ff;       /* Xanh Cyan Neon */
+            --money: #00ff87;         /* Xanh lá Neon */
+            --text-main: #ffffff;
+            --text-sub: #b2b2b2;
+            --radius: 20px;
+            
+            /* Màu Modal mới cho giống hình mẫu */
+            --modal-bg: #1A1A2E; 
+            --input-bg: #262640;
+        }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-main);
-            margin: 0; padding: 0;
-            font-size: 16px; min-height: 100vh;
-        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            font-size: 16px; min-height: 100vh;
+        }
 
-        /* HEADER */
-        header {
-            background: rgba(20, 20, 35, 0.85);
-            backdrop-filter: blur(15px);
-            padding: 15px 20px;
-            position: sticky; top: 0; z-index: 50;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .logo { font-weight: 800; font-size: 1.4rem; color: var(--primary); text-shadow: 0 0 15px rgba(0, 210, 255, 0.5); }
-        .header-actions button {
-            width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--glass-border);
-            background: var(--glass-bg); color: #fff; font-size: 1.1rem;
-            cursor: pointer; transition: 0.3s; margin-left: 8px;
-        }
+        /* HEADER */
+        header {
+            background: rgba(20, 20, 35, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            position: sticky; top: 0; z-index: 50;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 800; font-size: 1.4rem; color: var(--primary); text-shadow: 0 0 15px rgba(0, 210, 255, 0.5); }
+        .header-actions button {
+            width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--glass-border);
+            background: var(--glass-bg); color: #fff; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; margin-left: 8px;
+        }
 
-        .container { max-width: 800px; margin: 25px auto; padding: 0 20px; padding-bottom: 100px; }
+        .container { max-width: 800px; margin: 25px auto; padding: 0 20px; padding-bottom: 100px; }
 
-        /* SUMMARY CARD */
-        .summary-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            padding: 30px; border-radius: 24px;
-            text-align: center; margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            position: relative; overflow: hidden;
-        }
-        .summary-label { font-size: 0.9rem; color: var(--text-sub); letter-spacing: 1px; font-weight: 500; }
-        .summary-val { 
-            font-size: 3rem; font-weight: 800; margin: 10px 0; 
-            background: linear-gradient(to right, #00d2ff, #928DAB);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .summary-rate { 
-            background: rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 16px; border-radius: 30px; font-size: 0.95rem; font-weight: 600;
-            border: 1px solid var(--primary); color: var(--primary); cursor: pointer;
-        }
+        /* SUMMARY CARD */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 30px; border-radius: 24px;
+            text-align: center; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative; overflow: hidden;
+        }
+        .summary-label { font-size: 0.9rem; color: var(--text-sub); letter-spacing: 1px; font-weight: 500; }
+        .summary-val { 
+            font-size: 3rem; font-weight: 800; margin: 10px 0; 
+            background: linear-gradient(to right, #00d2ff, #928DAB);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .summary-rate { 
+            background: rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 30px; font-size: 0.95rem; font-weight: 600;
+            border: 1px solid var(--primary); color: var(--primary); cursor: pointer;
+        }
 
-        /* GRID THÁNG */
-        .month-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
-        .month-item {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            padding: 20px; border-radius: 20px;
-            text-align: center; cursor: pointer; transition: 0.3s;
-        }
-        .month-item:hover { 
-            background: rgba(255,255,255,0.2); transform: translateY(-5px); 
-            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.2); border-color: var(--primary);
-        }
-        .month-item h4 { margin: 0; font-size: 0.9rem; color: var(--text-sub); text-transform: uppercase; }
-        .month-item .val { font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 8px; }
+        /* GRID THÁNG */
+        .month-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+        .month-item {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            padding: 20px; border-radius: 20px;
+            text-align: center; cursor: pointer; transition: 0.3s;
+        }
+        .month-item:hover { 
+            background: rgba(255,255,255,0.2); transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.2); border-color: var(--primary);
+        }
+        .month-item h4 { margin: 0; font-size: 0.9rem; color: var(--text-sub); text-transform: uppercase; }
+        .month-item .val { font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 8px; }
 
-        /* VIEW CHI TIẾT */
-        .view-section { display: none; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* VIEW CHI TIẾT */
+        .view-section { display: none; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .nav-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
-        .btn-back { 
-            background: var(--glass-bg); border: 1px solid var(--glass-border); 
-            padding: 10px 20px; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; 
-            display: flex; align-items: center; gap: 8px;
-        }
+        .nav-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
+        .btn-back { 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); 
+            padding: 10px 20px; border-radius: 12px; color: #fff; font-weight: 600; cursor: pointer; 
+            display: flex; align-items: center; gap: 8px;
+        }
 
-        /* GRID NGÀY */
-        .days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+        /* GRID NGÀY */
+        .days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
 
-        .day-box {
-            background: rgba(20, 20, 35, 0.6);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            min-height: 120px;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between;
-            cursor: pointer; position: relative; padding: 10px; transition: 0.2s;
-        }
-        .day-box:hover { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
-        .day-box.has-data { 
-            background: rgba(0, 255, 135, 0.1); 
-            border-color: var(--money); 
-            box-shadow: 0 0 15px rgba(0, 255, 135, 0.1);
-        }
-        .day-box.today { border: 2px solid orange; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7); } 100% { box-shadow: 0 0 0 10px rgba(255, 165, 0, 0); } }
+        .day-box {
+            background: rgba(20, 20, 35, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            min-height: 120px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: space-between;
+            cursor: pointer; position: relative; padding: 10px; transition: 0.2s;
+        }
+        .day-box:hover { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
+        .day-box.has-data { 
+            background: rgba(0, 255, 135, 0.1); 
+            border-color: var(--money); 
+            box-shadow: 0 0 15px rgba(0, 255, 135, 0.1);
+        }
+        .day-box.today { border: 2px solid orange; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.7); } 100% { box-shadow: 0 0 0 10px rgba(255, 165, 0, 0); } }
 
-        .d-num { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.5); align-self: flex-start; }
-        .d-money { 
-            font-size: 1.5rem; font-weight: 800; color: var(--money); 
-            text-shadow: 0 0 15px rgba(0, 255, 135, 0.6); margin: 5px 0; letter-spacing: -0.5px;
-        }
-        .d-hours { font-size: 0.8rem; color: #fff; font-weight: 500; }
-        .d-time-row { 
-            font-size: 0.7rem; color: #000; background: rgba(255,255,255,0.8); 
-            padding: 3px 6px; border-radius: 6px; width: 100%; text-align: center;
-            font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .d-empty { font-size: 1.5rem; color: rgba(255,255,255,0.1); margin-top: 10px; }
+        .d-num { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.5); align-self: flex-start; }
+        .d-money { 
+            font-size: 1.5rem; font-weight: 800; color: var(--money); 
+            text-shadow: 0 0 15px rgba(0, 255, 135, 0.6); margin: 5px 0; letter-spacing: -0.5px;
+        }
+        .d-hours { font-size: 0.8rem; color: #fff; font-weight: 500; }
+        .d-time-row { 
+            font-size: 0.7rem; color: #000; background: rgba(255,255,255,0.8); 
+            padding: 3px 6px; border-radius: 6px; width: 100%; text-align: center;
+            font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .d-empty { font-size: 1.5rem; color: rgba(255,255,255,0.1); margin-top: 10px; }
 
-        /* --- MODAL INPUT STYLE MỚI (BALANCED) --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); z-index: 100;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(5px);
-        }
-        .modal-overlay.open { opacity: 1; pointer-events: all; }
-        
-        .modal {
-            background: var(--modal-bg); 
-            width: 90%; max-width: 420px; /* Rộng hơn chút để input không bị chật */
-            border-radius: 24px; padding: 30px 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            transform: scale(0.95); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .modal-overlay.open .modal { transform: scale(1); }
+        /* --- MODAL INPUT STYLE MỚI (BALANCED) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        
+        .modal {
+            background: var(--modal-bg); 
+            width: 90%; max-width: 420px; /* Rộng hơn chút để input không bị chật */
+            border-radius: 24px; padding: 30px 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: scale(0.95); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.open .modal { transform: scale(1); }
 
-        .modal-title {
-            margin: 0 0 25px 0; text-align: center; 
-            color: var(--primary); font-weight: 800; letter-spacing: 1px; font-size: 1.3rem;
-            text-transform: uppercase;
-        }
+        .modal-title {
+            margin: 0 0 25px 0; text-align: center; 
+            color: var(--primary); font-weight: 800; letter-spacing: 1px; font-size: 1.3rem;
+            text-transform: uppercase;
+        }
 
-        /* Grid layout cho 2 ô giờ */
-        .time-row { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; /* Chia đều 50-50 */
-            gap: 15px; 
-            margin-bottom: 20px;
-        }
+        /* Grid layout cho 2 ô giờ */
+        .time-row { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; /* Chia đều 50-50 */
+            gap: 15px; 
+            margin-bottom: 20px;
+        }
 
-        .input-group label { 
-            display: block; color: var(--text-sub); margin-bottom: 8px; 
-            font-weight: 600; font-size: 0.75rem; text-align: center; letter-spacing: 0.5px;
-        }
-        
-        .inp-galaxy {
-            width: 100%; padding: 12px 5px; /* Padding dọc vừa đủ, ngang nhỏ */
-            border-radius: 12px;
-            background: var(--input-bg); 
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; font-size: 1.4rem; /* Cỡ chữ vừa phải */
-            text-align: center; font-weight: 700;
-            outline: none; transition: 0.3s;
-            color-scheme: dark;
-        }
-        .inp-galaxy:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.2); }
+        .input-group label { 
+            display: block; color: var(--text-sub); margin-bottom: 8px; 
+            font-weight: 600; font-size: 0.75rem; text-align: center; letter-spacing: 0.5px;
+        }
+        
+        .inp-galaxy {
+            width: 100%; padding: 12px 5px; /* Padding dọc vừa đủ, ngang nhỏ */
+            border-radius: 12px;
+            background: var(--input-bg); 
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; font-size: 1.4rem; /* Cỡ chữ vừa phải */
+            text-align: center; font-weight: 700;
+            outline: none; transition: 0.3s;
+            color-scheme: dark;
+        }
+        .inp-galaxy:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.2); }
 
-        /* Kết quả */
-        .result-box {
-            background: rgba(0, 210, 255, 0.05); 
-            padding: 15px; border-radius: 16px; text-align: center; 
-            margin-bottom: 25px; border: 1px dashed rgba(0, 210, 255, 0.3);
-        }
-        .result-label { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-bottom: 5px; }
-        .result-val { font-size: 2.2rem; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px rgba(0, 210, 255, 0.4); }
+        /* Kết quả */
+        .result-box {
+            background: rgba(0, 210, 255, 0.05); 
+            padding: 15px; border-radius: 16px; text-align: center; 
+            margin-bottom: 25px; border: 1px dashed rgba(0, 210, 255, 0.3);
+        }
+        .result-label { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; letter-spacing: 1px; margin-bottom: 5px; }
+        .result-val { font-size: 2.2rem; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px rgba(0, 210, 255, 0.4); }
 
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 12px; letter-spacing: 0.5px; }
-        .btn-primary { 
-            background: linear-gradient(90deg, var(--primary), #0072ff);
-            color: white; box-shadow: 0 5px 20px rgba(0, 210, 255, 0.3);
-        }
-        .btn-primary:active { transform: translateY(2px); }
-        .btn-danger { background: rgba(255, 0, 85, 0.1); color: #ff3b75; border: 1px solid rgba(255, 0, 85, 0.3); }
-        .btn-ghost { background: transparent; color: var(--text-sub); }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 12px; letter-spacing: 0.5px; }
+        .btn-primary { 
+            background: linear-gradient(90deg, var(--primary), #0072ff);
+            color: white; box-shadow: 0 5px 20px rgba(0, 210, 255, 0.3);
+        }
+        .btn-primary:active { transform: translateY(2px); }
+        .btn-danger { background: rgba(255, 0, 85, 0.1); color: #ff3b75; border: 1px solid rgba(255, 0, 85, 0.3); }
+        .btn-ghost { background: transparent; color: var(--text-sub); }
 
-        /* Thanh action dưới cùng */
-        .modal-actions {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-        }
+        /* Thanh action dưới cùng */
+        .modal-actions {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
 
-    </style>
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo"><i class="fa-solid fa-meteor"></i> GALAXY PAY</div>
-        <div class="header-actions">
-            <button onclick="exportExcel()"><i class="fa-solid fa-file-export"></i></button>
-            <button onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
-        </div>
-    </header>
+    <header>
+        <div class="logo"><i class="fa-solid fa-meteor"></i> GALAXY PAY</div>
+        <div class="header-actions">
+            <button onclick="exportExcel()"><i class="fa-solid fa-file-export"></i></button>
+            <button onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+        </div>
+    </header>
 
-    <div class="container">
-        <div id="view-dashboard" class="view-section" style="display: block;">
-            <div class="summary-card">
-                <div class="summary-label">TỔNG THU NHẬP NĂM</div>
-                <div class="summary-val" id="yearTotal">0 ₫</div>
-                <div class="summary-rate" onclick="openSettings()">
-                    <i class="fa-solid fa-bolt"></i> <span id="displayRate">--</span> / giờ
-                </div>
-            </div>
-            <div class="month-grid" id="monthGrid"></div>
-        </div>
+    <div class="container">
+        <div id="view-dashboard" class="view-section" style="display: block;">
+            <div class="summary-card">
+                <div class="summary-label">TỔNG THU NHẬP NĂM</div>
+                <div class="summary-val" id="yearTotal">0 ₫</div>
+                <div class="summary-rate" onclick="openSettings()">
+                    <i class="fa-solid fa-bolt"></i> <span id="displayRate">--</span> / giờ
+                </div>
+            </div>
+            <div class="month-grid" id="monthGrid"></div>
+        </div>
 
-        <div id="view-detail" class="view-section">
-            <div class="nav-bar">
-                <button class="btn-back" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
-                <div style="text-align: right;">
-                    <div style="font-weight: 800; font-size: 1.2rem; color:#fff" id="detailTitle">Tháng --</div>
-                    <div style="font-size: 0.95rem; color: var(--primary); font-weight: 700;" id="detailTotal">0 ₫</div>
-                </div>
-            </div>
-            <div class="days-grid" id="dayList"></div>
-        </div>
-    </div>
+        <div id="view-detail" class="view-section">
+            <div class="nav-bar">
+                <button class="btn-back" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+                <div style="text-align: right;">
+                    <div style="font-weight: 800; font-size: 1.2rem; color:#fff" id="detailTitle">Tháng --</div>
+                    <div style="font-size: 0.95rem; color: var(--primary); font-weight: 700;" id="detailTotal">0 ₫</div>
+                </div>
+            </div>
+            <div class="days-grid" id="dayList"></div>
+        </div>
+    </div>
 
-    <div class="modal-overlay" id="modalInput">
-        <div class="modal">
-            <div class="modal-title">NHẬP GIỜ LÀM</div>
-            
-            <div class="time-row">
-                <div class="input-group">
-                    <label>BẮT ĐẦU</label>
-                    <input type="time" id="inpIn" class="inp-galaxy" onchange="calcPreview()">
-                </div>
-                <div class="input-group">
-                    <label>KẾT THÚC</label>
-                    <input type="time" id="inpOut" class="inp-galaxy" onchange="calcPreview()">
-                </div>
-            </div>
+    <div class="modal-overlay" id="modalInput">
+        <div class="modal">
+            <div class="modal-title">NHẬP GIỜ LÀM</div>
+            
+            <div class="time-row">
+                <div class="input-group">
+                    <label>BẮT ĐẦU</label>
+                    <input type="time" id="inpIn" class="inp-galaxy" onchange="calcPreview()">
+                </div>
+                <div class="input-group">
+                    <label>KẾT THÚC</label>
+                    <input type="time" id="inpOut" class="inp-galaxy" onchange="calcPreview()">
+                </div>
+            </div>
 
-            <div class="input-group">
-                <label>NGHỈ GIỮA GIỜ (PHÚT)</label>
-                <input type="number" id="inpBreak" value="0" oninput="calcPreview()" class="inp-galaxy" style="font-size:1.3rem">
-            </div>
+            <div class="input-group">
+                <label>NGHỈ GIỮA GIỜ (PHÚT)</label>
+                <input type="number" id="inpBreak" value="0" oninput="calcPreview()" class="inp-galaxy" style="font-size:1.3rem">
+            </div>
 
-            <div class="result-box">
-                <div class="result-label">KẾT QUẢ</div>
-                <div class="result-val" id="previewVal">0h</div>
-            </div>
+            <div class="result-box">
+                <div class="result-label">KẾT QUẢ</div>
+                <div class="result-val" id="previewVal">0h</div>
+            </div>
 
-            <button class="btn btn-primary" onclick="saveData()">LƯU LẠI</button>
-            
-            <div class="modal-actions">
-                <button class="btn btn-danger" onclick="deleteData()">XÓA</button>
-                <button class="btn btn-ghost" onclick="closeModal()">ĐÓNG</button>
-            </div>
-        </div>
-    </div>
+            <button class="btn btn-primary" onclick="saveData()">LƯU LẠI</button>
+            
+            <div class="modal-actions">
+                <button class="btn btn-danger" onclick="deleteData()">XÓA</button>
+                <button class="btn btn-ghost" onclick="closeModal()">ĐÓNG</button>
+            </div>
+        </div>
+    </div>
 
-    <div class="modal-overlay" id="modalSettings">
-        <div class="modal">
-            <h3 style="text-align: center; color:#fff; margin-bottom:20px">CÀI ĐẶT LƯƠNG</h3>
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight:600; display:block; margin-bottom:8px; color:var(--text-sub); text-align:center;">LƯƠNG 1 GIỜ (VNĐ)</label>
-                <input type="number" id="inpRate" class="inp-galaxy">
-            </div>
-            <button class="btn btn-primary" onclick="saveSettings()">CẬP NHẬT</button>
-            <button class="btn btn-ghost" onclick="document.getElementById('modalSettings').classList.remove('open')">Hủy bỏ</button>
-            <button class="btn btn-ghost" onclick="resetAll()" style="color: #ff3b75; font-size: 0.8rem; margin-top:10px; opacity:0.8">Xóa dữ liệu gốc</button>
-        </div>
-    </div>
+    <div class="modal-overlay" id="modalSettings">
+        <div class="modal">
+            <h3 style="text-align: center; color:#fff; margin-bottom:20px">CÀI ĐẶT LƯƠNG</h3>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight:600; display:block; margin-bottom:8px; color:var(--text-sub); text-align:center;">LƯƠNG 1 GIỜ (VNĐ)</label>
+                <input type="number" id="inpRate" class="inp-galaxy">
+            </div>
+            <button class="btn btn-primary" onclick="saveSettings()">CẬP NHẬT</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('modalSettings').classList.remove('open')">Hủy bỏ</button>
+            <button class="btn btn-ghost" onclick="resetAll()" style="color: #ff3b75; font-size: 0.8rem; margin-top:10px; opacity:0.8">Xóa dữ liệu gốc</button>
+        </div>
+    </div>
 
 <script>
-    const STORAGE_KEY = 'SalaryApp_Galaxy_Balanced_v8';
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); 
-    const currentDay = now.getDate();
+    const STORAGE_KEY = 'SalaryApp_Galaxy_Balanced_v8';
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); 
+    const currentDay = now.getDate();
 
-    let appData = { rate: 25000, records: {} };
-    let activeKey = null;
+    let appData = { rate: 25000, records: {} };
+    let activeKey = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadData();
-        renderDashboard();
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+        loadData();
+        renderDashboard();
+    });
 
-    // 1. TÍNH TOÁN
-    function calcHours(inTime, outTime, breakMins) {
-        if(!inTime || !outTime) return 0;
-        const [h1, m1] = inTime.split(':').map(Number);
-        const [h2, m2] = outTime.split(':').map(Number);
-        
-        let min1 = h1 * 60 + m1;
-        let min2 = h2 * 60 + m2;
-        if (min2 < min1) min2 += 1440; // Qua đêm
+    // 1. TÍNH TOÁN
+    function calcHours(inTime, outTime, breakMins) {
+        if(!inTime || !outTime) return 0;
+        const [h1, m1] = inTime.split(':').map(Number);
+        const [h2, m2] = outTime.split(':').map(Number);
+        
+        let min1 = h1 * 60 + m1;
+        let min2 = h2 * 60 + m2;
+        if (min2 < min1) min2 += 1440; // Qua đêm
 
-        let diff = (min2 - min1) - breakMins;
-        return diff < 0 ? 0 : parseFloat((diff/60).toFixed(2));
-    }
+        let diff = (min2 - min1) - breakMins;
+        return diff < 0 ? 0 : parseFloat((diff/60).toFixed(2));
+    }
 
-    function calcPreview() {
-        const i = document.getElementById('inpIn').value;
-        const o = document.getElementById('inpOut').value;
-        const b = parseInt(document.getElementById('inpBreak').value) || 0;
-        const val = calcHours(i, o, b);
-        document.getElementById('previewVal').innerText = val + "h";
-        return val;
-    }
+    function calcPreview() {
+        const i = document.getElementById('inpIn').value;
+        const o = document.getElementById('inpOut').value;
+        const b = parseInt(document.getElementById('inpBreak').value) || 0;
+        const val = calcHours(i, o, b);
+        document.getElementById('previewVal').innerText = val + "h";
+        return val;
+    }
 
-    // 2. DATA
-    function saveData() {
-        const val = calcPreview();
-        if(val > 0) {
-            appData.records[activeKey] = {
-                in: document.getElementById('inpIn').value,
-                out: document.getElementById('inpOut').value,
-                break: parseInt(document.getElementById('inpBreak').value) || 0,
-                val: val
-            };
-        }
-        updateStorage(); closeModal();
-        renderDetail(parseInt(activeKey.split('_')[1]));
-    }
+    // 2. DATA
+    function saveData() {
+        const val = calcPreview();
+        if(val > 0) {
+            appData.records[activeKey] = {
+                in: document.getElementById('inpIn').value,
+                out: document.getElementById('inpOut').value,
+                break: parseInt(document.getElementById('inpBreak').value) || 0,
+                val: val
+            };
+        }
+        updateStorage(); closeModal();
+        renderDetail(parseInt(activeKey.split('_')[1]));
+    }
 
-    function deleteData() {
-        if(appData.records[activeKey]) { delete appData.records[activeKey]; updateStorage(); }
-        closeModal();
-        renderDetail(parseInt(activeKey.split('_')[1]));
-    }
+    function deleteData() {
+        if(appData.records[activeKey]) { delete appData.records[activeKey]; updateStorage(); }
+        closeModal();
+        renderDetail(parseInt(activeKey.split('_')[1]));
+    }
 
-    function updateStorage() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        renderDashboard();
-    }
-    
-    function loadData() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(raw) appData = JSON.parse(raw);
-        document.getElementById('displayRate').innerText = formatMoney(appData.rate);
-        document.getElementById('inpRate').value = appData.rate;
-    }
+    function updateStorage() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        renderDashboard();
+    }
+    
+    function loadData() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw) appData = JSON.parse(raw);
+        document.getElementById('displayRate').innerText = formatMoney(appData.rate);
+        document.getElementById('inpRate').value = appData.rate;
+    }
 
-    // 3. RENDER UI
-    function renderDashboard() {
-        const grid = document.getElementById('monthGrid');
-        grid.innerHTML = '';
-        let yearSum = 0;
+    // 3. RENDER UI
+    function renderDashboard() {
+        const grid = document.getElementById('monthGrid');
+        grid.innerHTML = '';
+        let yearSum = 0;
 
-        for(let m=0; m<12; m++) {
-            let monthSum = 0;
-            const days = new Date(currentYear, m+1, 0).getDate();
-            for(let d=1; d<=days; d++) {
-                const k = `m_${m}_d_${d}`;
-                if(appData.records[k]) monthSum += appData.records[k].val * appData.rate;
-            }
-            yearSum += monthSum;
+        for(let m=0; m<12; m++) {
+            let monthSum = 0;
+            const days = new Date(currentYear, m+1, 0).getDate();
+            for(let d=1; d<=days; d++) {
+                const k = `m_${m}_d_${d}`;
+                if(appData.records[k]) monthSum += appData.records[k].val * appData.rate;
+            }
+            yearSum += monthSum;
 
-            const div = document.createElement('div');
-            div.className = 'month-item';
-            div.onclick = () => showDetail(m);
-            div.innerHTML = `<h4>Tháng ${m+1}</h4><div class="val">${monthSum > 0 ? formatShort(monthSum) : '-'}</div>`;
-            grid.appendChild(div);
-        }
-        document.getElementById('yearTotal').innerText = formatMoney(yearSum);
-    }
+            const div = document.createElement('div');
+            div.className = 'month-item';
+            div.onclick = () => showDetail(m);
+            div.innerHTML = `<h4>Tháng ${m+1}</h4><div class="val">${monthSum > 0 ? formatShort(monthSum) : '-'}</div>`;
+            grid.appendChild(div);
+        }
+        document.getElementById('yearTotal').innerText = formatMoney(yearSum);
+    }
 
-    function showDetail(m) {
-        document.getElementById('view-dashboard').style.display = 'none';
-        document.getElementById('view-detail').style.display = 'block';
-        renderDetail(m);
-    }
+    function showDetail(m) {
+        document.getElementById('view-dashboard').style.display = 'none';
+        document.getElementById('view-detail').style.display = 'block';
+        renderDetail(m);
+    }
 
-    function renderDetail(m) {
-        document.getElementById('detailTitle').innerText = `Tháng ${m+1}`;
-        const container = document.getElementById('dayList');
-        container.innerHTML = '';
-        const days = new Date(currentYear, m+1, 0).getDate();
-        let total = 0;
+    function renderDetail(m) {
+        document.getElementById('detailTitle').innerText = `Tháng ${m+1}`;
+        const container = document.getElementById('dayList');
+        container.innerHTML = '';
+        const days = new Date(currentYear, m+1, 0).getDate();
+        let total = 0;
 
-        for(let d=1; d<=days; d++) {
-            const k = `m_${m}_d_${d}`;
-            const rec = appData.records[k];
-            const hasData = !!rec;
-            const isToday = (m === currentMonth && d === currentDay);
-            
-            if(hasData) total += rec.val * appData.rate;
+        for(let d=1; d<=days; d++) {
+            const k = `m_${m}_d_${d}`;
+            const rec = appData.records[k];
+            const hasData = !!rec;
+            const isToday = (m === currentMonth && d === currentDay);
+            
+            if(hasData) total += rec.val * appData.rate;
 
-            const div = document.createElement('div');
-            div.className = `day-box ${hasData ? 'has-data' : ''} ${isToday ? 'today' : ''}`;
-            div.onclick = () => openModal(k, d, m);
+            const div = document.createElement('div');
+            div.className = `day-box ${hasData ? 'has-data' : ''} ${isToday ? 'today' : ''}`;
+            div.onclick = () => openModal(k, d, m);
 
-            let html = `<div class="d-num">${d}</div>`;
-            if(hasData) {
-                html += `<div class="d-money">${formatShort(rec.val * appData.rate)}</div>`;
-                html += `<div class="d-hours">${rec.val} giờ</div>`;
-                html += `<div class="d-time-row">${rec.in} - ${rec.out}</div>`;
-            } else {
-                 html += `<div class="d-empty">+</div>`;
-            }
-            div.innerHTML = html;
-            container.appendChild(div);
-        }
-        document.getElementById('detailTotal').innerText = formatMoney(total);
-        window.scrollTo(0,0);
-    }
+            let html = `<div class="d-num">${d}</div>`;
+            if(hasData) {
+                html += `<div class="d-money">${formatShort(rec.val * appData.rate)}</div>`;
+                html += `<div class="d-hours">${rec.val} giờ</div>`;
+                html += `<div class="d-time-row">${rec.in} - ${rec.out}</div>`;
+            } else {
+                 html += `<div class="d-empty">+</div>`;
+            }
+            div.innerHTML = html;
+            container.appendChild(div);
+        }
+        document.getElementById('detailTotal').innerText = formatMoney(total);
+        window.scrollTo(0,0);
+    }
 
-    // UTILS
-    function openModal(key, d, m) {
-        activeKey = key;
-        document.getElementById('modalInput').classList.add('open');
-        const rec = appData.records[key];
-        
-        if(rec) {
-            document.getElementById('inpIn').value = rec.in;
-            document.getElementById('inpOut').value = rec.out;
-            document.getElementById('inpBreak').value = rec.break;
-        } else {
-            document.getElementById('inpIn').value = "";
-            document.getElementById('inpOut').value = "";
-            document.getElementById('inpBreak').value = 0; 
-        }
-        calcPreview();
-    }
-    function closeModal() { document.getElementById('modalInput').classList.remove('open'); }
-    function goBack() { 
-        document.getElementById('view-detail').style.display = 'none';
-        document.getElementById('view-dashboard').style.display = 'block';
-        renderDashboard();
-    }
-    function openSettings() { document.getElementById('modalSettings').classList.add('open'); }
-    function saveSettings() {
-        const r = parseFloat(document.getElementById('inpRate').value);
-        if(r) { appData.rate = r; updateStorage(); document.getElementById('modalSettings').classList.remove('open'); }
-    }
-    function resetAll() { if(confirm("Xóa hết?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
-    
-    function exportExcel() {
-        let csv = "\uFEFFNgày,Tháng,Năm,Vào,Ra,Nghỉ,Giờ,Tiền\n";
-        Object.keys(appData.records).sort().forEach(k => {
-            const r = appData.records[k];
-            const p = k.split('_');
-            csv += `${p[3]},${parseInt(p[1])+1},${currentYear},${r.in},${r.out},${r.break},${r.val},${r.val*appData.rate}\n`;
-        });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8;'}));
-        link.download = `Luong_${currentYear}.csv`; link.click();
-    }
-    function formatMoney(n) { return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(n); }
-    function formatShort(n) {
-        if(n>=1000000) return (n/1000000).toFixed(1) + 'tr';
-        if(n>=1000) return (n/1000).toFixed(0) + 'k';
-        return n;
-    }
+    // UTILS
+    function openModal(key, d, m) {
+        activeKey = key;
+        document.getElementById('modalInput').classList.add('open');
+        const rec = appData.records[key];
+        
+        if(rec) {
+            document.getElementById('inpIn').value = rec.in;
+            document.getElementById('inpOut').value = rec.out;
+            document.getElementById('inpBreak').value = rec.break;
+        } else {
+            document.getElementById('inpIn').value = "";
+            document.getElementById('inpOut').value = "";
+            document.getElementById('inpBreak').value = 0; 
+        }
+        calcPreview();
+    }
+    function closeModal() { document.getElementById('modalInput').classList.remove('open'); }
+    function goBack() { 
+        document.getElementById('view-detail').style.display = 'none';
+        document.getElementById('view-dashboard').style.display = 'block';
+        renderDashboard();
+    }
+    function openSettings() { document.getElementById('modalSettings').classList.add('open'); }
+    function saveSettings() {
+        const r = parseFloat(document.getElementById('inpRate').value);
+        if(r) { appData.rate = r; updateStorage(); document.getElementById('modalSettings').classList.remove('open'); }
+    }
+    function resetAll() { if(confirm("Xóa hết?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
+    
+    function exportExcel() {
+        let csv = "\uFEFFNgày,Tháng,Năm,Vào,Ra,Nghỉ,Giờ,Tiền\n";
+        Object.keys(appData.records).sort().forEach(k => {
+            const r = appData.records[k];
+            const p = k.split('_');
+            csv += `${p[3]},${parseInt(p[1])+1},${currentYear},${r.in},${r.out},${r.break},${r.val},${r.val*appData.rate}\n`;
+        });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8;'}));
+        link.download = `Luong_${currentYear}.csv`; link.click();
+    }
+    function formatMoney(n) { return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(n); }
+    function formatShort(n) {
+        if(n>=1000000) return (n/1000000).toFixed(1) + 'tr';
+        if(n>=1000) return (n/1000).toFixed(0) + 'k';
+        return n;
+    }
 </script>
 </body>
 </html>
+thêm mk vào code này r hướng dẫn
